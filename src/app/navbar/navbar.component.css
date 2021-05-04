@@ -1,0 +1,21 @@
+
+.list{
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    background-color: black;
+    margin: 0;
+    height: 8vh;
+}
+
+li{
+    color: white;
+}
+
+li :hover{
+    color : rgb(184, 184, 184);
+}
+
+li :active{
+    color: rgb(97, 97, 97);
+}

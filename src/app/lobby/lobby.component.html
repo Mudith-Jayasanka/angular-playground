@@ -1,0 +1,12 @@
+<app-navbar></app-navbar>
+
+<div class="message-container">
+    <div class="message" *ngFor="let msg of messageHistory">
+        <h3>{{msg.message}}</h3>
+    </div>
+</div>
+
+<div class="inputArea">
+    <input type="text" id="textInput" [(ngModel)]="message">
+    <input type="button" value="Send" id="sendButton" (click)="send()">
+</div>

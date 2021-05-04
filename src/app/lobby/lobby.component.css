@@ -1,0 +1,36 @@
+.message{
+    margin-left: 2vh;
+    margin-right: 2vh;
+    margin-bottom: 0.5vh;
+    margin-top: 0.5vh;
+
+    padding: 0.1vh;
+    border-radius: 2vh;
+    background-color: orangered;
+}
+
+.message-container{
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    background-color: rgb(51, 51, 51);
+}
+
+h3{
+    color: rgb(0, 0, 0);
+    padding-left: 1vh;
+}
+
+.inputArea{
+    padding:1vh;
+    height: 6vh;
+    background-color: black;
+}
+
+#textInput{
+    height: 100%;
+    width: 90%;
+}
+
+#sendButton{
+    font-size: 50px;
+}
