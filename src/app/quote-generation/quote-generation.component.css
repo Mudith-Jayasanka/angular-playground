@@ -11,7 +11,7 @@
     flex-direction: column;
 
     border-radius: 2vh;
-    margin-top: 28vh;
+    margin-top: 20vh;
     max-width: 80vh;
     min-width: 40vh;
     max-height: 20vh;
@@ -32,6 +32,7 @@
 
 h2,h3{
     color: black;
+    transform: none;
 }
 
 h2{
@@ -39,3 +40,22 @@ h2{
 }
 
 
+.options{
+    background-color: rgb(41, 41, 41);
+    display: flex;
+    justify-content: space-around;
+}
+
+.option{
+    color: white;
+}
+
+.option :active{
+    color: rgb(255, 80, 80);
+}
+
+.modeContent{
+    color: rgb(187, 187, 187);
+    align-content: center;
+    text-align: center;
+}

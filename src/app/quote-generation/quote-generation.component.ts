@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DatatransferService } from '../datatransfer.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { OriginatorInterface, QuoteInterface } from '../interfaces/quote-interface';
+import { QuoteService } from '../services/quote.service';
+
 
 @Component({
   selector: 'app-quote-generation',
@@ -8,54 +11,93 @@ import { DatatransferService } from '../datatransfer.service';
 })
 export class QuoteGenerationComponent implements OnInit {
 
-  constructor(private datatransfer : DatatransferService) { }
+  constructor(private quoteGen : QuoteService , private firestore : AngularFirestore) { }
+
+  quote : string;
+  author : string;
+
+  mode : string;
+  modeBool : boolean;
 
   ngOnInit(): void {
-    this.getNewQuote();
+    this.mode = "Mining";
+    this.modeBool = true; 
+
+    this.quoteClock();
   }
 
-  author: any = "";
-  quote: any = "";
-
-  authorQueue : string[] = [];
-  quoteQueue : string[] = [];
-
-  firstQuoteLoaded : boolean = false;
-  fetching : boolean = false;
-  getNewQuote() {
-    if (this.authorQueue.length >20 ) return;
-    if(this.fetching)return;
-
-    //console.log("Sending Request");
-    this.fetching = true;
-    this.datatransfer.getQuote().subscribe(
-      resolve =>{
-        this.quoteQueue.push(resolve.content);
-        this.authorQueue.push(resolve.originator.name);
-        
-        if(!this.firstQuoteLoaded){
-          this.newQuote();
-          this.firstQuoteLoaded = true;
-        }
-  
-        this.fetching = false;
-        //The server only accepts one request per second
-        setTimeout(() => {  this.getNewQuote(); }, 1500);
-      },
-      error => {
-        setTimeout(()=>{this.getNewQuote();} , 1200);
-      }
-    )
+  //Requests new Quotes from api at a given interval (API allows max of 1 Quote per second)
+  quoteClock(){
+    //Making request frequency slightly higher than Limit to avoid getting Requests blocked
+    if(this.modeBool){
+      this.newQuote();
+    }
+    setTimeout( () => { this.quoteClock();} , 2500);
   }
 
+  quoteCount : number = 0;
   newQuote(){
-    this.datatransfer.getHello().subscribe((data)=>{console.log(data);})
-    if(this.authorQueue.length == 0) return;
-
-    this.author = this.authorQueue[0];
-    this.quote = this.quoteQueue[0];
-    this.authorQueue.shift();
-    this.quoteQueue.shift();
-    this.getNewQuote();
+    this.quoteGen.getQuote().subscribe( all_data =>{
+      let quote = this.getQuoteObj(all_data);
+      this.quote = quote.content;
+      this.author = quote.originator.name;
+      this.quoteCount = this.quoteCount + 1;
+      this.addQuote(quote);
+    });
+    
   }
+
+  addQuote(quote : QuoteInterface){
+    this.firestore.collection("Quotes").doc("reeea").get().subscribe(res => {
+      let data = res.data();
+      
+      if(data === undefined){
+        console.log("Quotes added in this session : " + this.quoteCount);
+        this.addNewQuote(quote);
+      }else{
+        console.log("Doc Exists!");
+      }
+    });
+  }
+
+  addNewQuote(quote : QuoteInterface){
+    this.firestore.collection("Quotes").doc(quote.id.toString()).set(quote);
+  }
+
+  // Saving only attributes that i decide to be nescessary
+  getQuoteObj(jsonQuote){
+    let quote : QuoteInterface;
+    let originator_var : OriginatorInterface;
+    originator_var = {
+      id : jsonQuote["originator"]["id"],
+      name : jsonQuote["originator"]["name"]
+    }
+
+    quote = {
+      content : jsonQuote["content"],
+      id : jsonQuote["id"],
+      tags : jsonQuote["tags"],
+      originator : originator_var
+    };
+    return quote;
+  }
+
+
+  setToMining(){
+    this.mode = "Mining";
+    this.modeBool = true;
+  }
+
+  setToFirebase(){
+    this.mode = "Firebase";
+
+  }
+
+  getRealtimeQuote(){
+    console.log("Not Implemented Yet");
+    // I need to figure out how to get a random quote from firebase without wasting data or Reading too much
+
+  }
+
+
 }

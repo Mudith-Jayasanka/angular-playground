@@ -7,6 +7,6 @@
 </div>
 
 <div class="inputArea">
-    <input type="text" id="textInput" [(ngModel)]="message">
+    <input type="text" id="textInput" [(ngModel)]="message" (keydown)="enterPressed($event)">
     <input type="button" value="Send" id="sendButton" (click)="send()">
 </div>

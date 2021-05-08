@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DatatransferService } from './datatransfer.service';
+import { QuoteService } from './quote.service';
 
-describe('DatatransferService', () => {
-  let service: DatatransferService;
+describe('QuoteService', () => {
+  let service: QuoteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DatatransferService);
+    service = TestBed.inject(QuoteService);
   });
 
   it('should be created', () => {

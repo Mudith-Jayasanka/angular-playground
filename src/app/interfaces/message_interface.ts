@@ -1,4 +1,5 @@
 export interface Message_interface {
-    id : string;
-    message : string;
+    username?: string;
+    message?: string;
+    time?: string;
 }

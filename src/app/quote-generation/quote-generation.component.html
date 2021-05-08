@@ -1,5 +1,18 @@
+<div class="options">
+    <div>
+        <h3 class="option">Mine Quotes</h3>
+    </div>
+    <div id="modeDisplay">
+        <h2 class="modeContent">||{{ mode }}||</h2>
+        <h2 class="modeContent">-{{ quoteCount }}-</h2>
+    </div>
+    <div>
+        <h3 class="option">Firebase Quotes</h3>
+    </div>
+</div>
+
 <div class="quoteParent">
-    <div class="quoteDiv" (click)="newQuote()">
+    <div class="quoteDiv" (click)="getRealtimeQuote()">
         <h3>{{quote}}</h3>
         <h2>-{{author}}</h2>
     </div>
