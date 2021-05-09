@@ -36,25 +36,27 @@ export class QuoteGenerationComponent implements OnInit {
   }
 
   quoteCount : number = 0;
+  duplicateCount : number = 0;
   newQuote(){
     this.quoteGen.getQuote().subscribe( all_data =>{
       let quote = this.getQuoteObj(all_data);
       this.quote = quote.content;
       this.author = quote.originator.name;
-      this.quoteCount = this.quoteCount + 1;
       this.addQuote(quote);
     });
     
   }
 
   addQuote(quote : QuoteInterface){
-    this.firestore.collection("Quotes").doc("reeea").get().subscribe(res => {
+    this.firestore.collection("Quotes").doc(quote.id.toString()).get().subscribe(res => {
       let data = res.data();
       
       if(data === undefined){
+        this.quoteCount = this.quoteCount + 1;
         console.log("Quotes added in this session : " + this.quoteCount);
         this.addNewQuote(quote);
       }else{
+        this.duplicateCount = this.duplicateCount + 1;
         console.log("Doc Exists!");
       }
     });
